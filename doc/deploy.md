@@ -2,6 +2,7 @@
 
 
 Jenkins CircleCIなどは使いません。学内Webサーバへのデプロイ手順を説明します。古き良きサーバの構築をします。  
+個人的な勉強の意味で必ずしも必要でないものが含まれているため、取捨選択をしてください。  
 
 # ネットワーク図  
 
@@ -30,7 +31,66 @@ Jenkins CircleCIなどは使いません。学内Webサーバへのデプロイ�
   
 
 http://www.nsrg.fml.org/notes/proj-2018/
+## リモートサーバ接続  
+### vnc
+コマンドラインで 
+vncserver172.xx.yyy.zzz:pと入力する。  
+GUIが立ち上がるのでユーザパスワードを入力する。成功  
 
+### ssh  
+ssh username@172.xx.yyy.zzz:pを入力する。  
+パスワードを求められるので入力する。成功
+
+### sshの自動化スクリプト
+
+expectを使うのでapt install expectをしておく
+not found言われるので。  
+
+ホームディレクトリで```vi myssh.sh```  
+
+
+```
+#!/bin/sh
+
+username="bandit0"
+ipadd="bandit.labs.overthewire.org"
+pass="bandit0"
+
+expect -c "
+set timeout 5
+spawn ssh -p 2220 ${username}@${ipadd}
+expect \"Password:\"
+send \"${pass}\n\"
+interact
+"
+```
+これでsshの自動化がされた。
+$ sh myssh.sh
+
+### コマンド化  
+コマンド化して楽しようの会  
+```$ sh myssh.sh```  
+を毎回行うのは面倒だから。  
+~/bin配下に自作コマンドを置く  
+
+```$ ls -a```で.profileがあるので```$ vi .profile```する。  
+
+```
+# ~/.profile
+export PATH=~/bin:$PATH
+```  
+ユーザホームのフルパスを示すようになる。  
+
+```$ source ~/.profile```   
+sourceコマンドで再読み込みする。  
+mv コマンドでmyssh.shを/binに移動する。  
+mvコマンドでmyssh.shをmysshにリネームする。  
+リネーム後ホームディレクトリで  
+```chmod a+x /bin/myssh```  
+
+これで```$ myssh```でssh接続ができパスワード入力も自動化できる。  
+ssh接続はmh4yで踏み台サーバとか経由するので自動化できた方がいい。  
+公開鍵ではなくパスワード認証の場合。qiita記事に色々書いているのでお好みで探してください。  
 
 ## Debianインストール  
 
