@@ -64,6 +64,8 @@ send \"${pass}\n\"
 interact
 "
 ```
+username ipadd passは適宜置き換えてください。  
+
 これでsshの自動化がされた。
 $ sh myssh.sh
 
