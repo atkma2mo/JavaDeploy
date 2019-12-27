@@ -527,7 +527,8 @@ jdbc:h2./dataとかwebconsoleでパスの設定をapplicationpropertiesと同じ
 sbinはシステム  
 
 
-理想はshellscript書いて自動化ができれば…  
+理想は自動化ができれば(Ansible Ceph)…  
+DevOpsしたい。jenkins dockerでごにょごにょ
 
 
 
